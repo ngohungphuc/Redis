@@ -1,9 +1,13 @@
 ### 5 data type in redis
-⋅⋅ String
-⋅⋅ List (order list)
-⋅⋅ Set
-⋅⋅ Hash
-⋅⋅ Sorted Set
+- String
+
+- List (order list)
+
+- Set
+
+- Hash
+
+- Sorted Set
 
 #### string get and set
 ```
@@ -29,3 +33,11 @@ getrange customer:1 start_index end_indexq
 mset order:1 "order 1 data" order:2 "order 2 data"
 mget order:1 order:2
 ```
+
+#### lpush & rpush
+```
+ lpush recentcomments "comment 1"
+ rpush recentcomments "comment 2"
+```
+
+#### ltrim
