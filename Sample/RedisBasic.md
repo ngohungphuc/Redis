@@ -41,3 +41,11 @@ mget order:1 order:2
 ```
 
 #### ltrim
+
+#### adding to a set
+```
+sadd post:1:likes "joe" "bob"
+scard post:1:likes
+smembers post:1:likes
+sdiff post:1:likes post:2:likes
+```
