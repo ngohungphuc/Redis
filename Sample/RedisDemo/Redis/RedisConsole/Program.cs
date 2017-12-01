@@ -21,24 +21,58 @@ namespace RedisConsole
             //    var res = Encoding.UTF8.GetString(client.Get("urn:messages:1"));
             //    Console.WriteLine(res);
             //}
-            using (IRedisClient client = new RedisClient())
-            {
-                var customerNames = client.Lists["urn:customernames"];
-                customerNames.Clear();
-                customerNames.Add("Joe");
-                customerNames.Add("Bob");
 
-            }
+            //using (IRedisClient client = new RedisClient())
+            //{
+            //    var customerNames = client.Lists["urn:customernames"];
+            //    customerNames.Clear();
+            //    customerNames.Add("Joe");
+            //    customerNames.Add("Bob");
 
-            using (IRedisClient client = new RedisClient())
+            //}
+
+            //using (IRedisClient client = new RedisClient())
+            //{
+            //    var customerNames = client.Lists["urn:customernames"];
+            //    foreach (var customerName in customerNames)
+            //    {
+            //        Console.WriteLine(customerName);
+            //    }
+
+            //}
+
+            long lastId = 0;
+            using (var client = new RedisClient())
             {
-                var customerNames = client.Lists["urn:customernames"];
-                foreach (var customerName in customerNames)
+                var customerClient = client.As<Customer>();
+                var customer = new Customer()
                 {
-                    Console.WriteLine(customerName);
-                }
-
+                    Id = customerClient.GetNextSequence(),
+                    Address = "123",
+                    Name = "Bob",
+                    Orders =
+                        new List<Order>
+                        {
+                            new Order { OrderNumber = "1234112" },
+                            new Order { OrderNumber = "123123123" }
+                        }
+                };
+                var storedCustomer = customerClient.Store(customer);
+                lastId = storedCustomer.Id;
             }
         }
+    }
+
+    public class Customer
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public List<Order> Orders { get; set; }
+    }
+
+    public class Order
+    {
+        public string OrderNumber { get; set; }
     }
 }
