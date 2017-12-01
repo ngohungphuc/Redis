@@ -60,19 +60,27 @@ namespace RedisConsole
                 var storedCustomer = customerClient.Store(customer);
                 lastId = storedCustomer.Id;
             }
+
+            using (var client = new RedisClient())
+            {
+                var customerClient = client.As<Customer>();
+                var customer = customerClient.GetById(lastId);
+                Console.WriteLine("Got customer {0} with name {1}", customer.Id, customer.Name);
+            }
+
         }
-    }
 
-    public class Customer
-    {
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public List<Order> Orders { get; set; }
-    }
+        public class Customer
+        {
+            public long Id { get; set; }
+            public string Name { get; set; }
+            public string Address { get; set; }
+            public List<Order> Orders { get; set; }
+        }
 
-    public class Order
-    {
-        public string OrderNumber { get; set; }
+        public class Order
+        {
+            public string OrderNumber { get; set; }
+        }
     }
 }
