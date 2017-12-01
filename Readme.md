@@ -1,1 +1,1 @@
-[logo](img/Redis_Logo.png)
+![logo](img/Redis_Logo.png)
