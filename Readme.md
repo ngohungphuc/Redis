@@ -1,0 +1,1 @@
+[logo](img/Redis_Logo.png)

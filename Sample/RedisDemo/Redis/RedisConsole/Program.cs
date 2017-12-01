@@ -68,14 +68,22 @@ namespace RedisConsole
             //    Console.WriteLine("Got customer {0} with name {1}", customer.Id, customer.Name);
             //}
 
+            //using (IRedisClient client = new RedisClient())
+            //{
+            //    var transaction = client.CreateTransaction();
+            //    transaction.QueueCommand(c=> c.Set("abc",1));
+            //    transaction.QueueCommand(c => c.Increment("abc", 1));
+            //    transaction.Commit();
+            //    var result = client.Get<int>("abc");
+            //    Console.WriteLine(result);
+            //}
+
             using (IRedisClient client = new RedisClient())
             {
-                var transaction = client.CreateTransaction();
-                transaction.QueueCommand(c=> c.Set("abc",1));
-                transaction.QueueCommand(c => c.Increment("abc", 1));
-                transaction.Commit();
-                var result = client.Get<int>("abc");
-                Console.WriteLine(result);
+                //client.PublishMessage("debug", "hello C#");
+                var sub = client.CreateSubscription();
+                sub.OnMessage = (c, m) => Console.WriteLine("got message {0} from chanel {1}", m, c);
+                sub.SubscribeToChannels("news");
             }
         }
 
