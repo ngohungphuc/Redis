@@ -41,33 +41,42 @@ namespace RedisConsole
 
             //}
 
-            long lastId = 0;
-            using (var client = new RedisClient())
-            {
-                var customerClient = client.As<Customer>();
-                var customer = new Customer()
-                {
-                    Id = customerClient.GetNextSequence(),
-                    Address = "123",
-                    Name = "Bob",
-                    Orders =
-                        new List<Order>
-                        {
-                            new Order { OrderNumber = "1234112" },
-                            new Order { OrderNumber = "123123123" }
-                        }
-                };
-                var storedCustomer = customerClient.Store(customer);
-                lastId = storedCustomer.Id;
-            }
+            //long lastId = 0;
+            //using (var client = new RedisClient())
+            //{
+            //    var customerClient = client.As<Customer>();
+            //    var customer = new Customer()
+            //    {
+            //        Id = customerClient.GetNextSequence(),
+            //        Address = "123",
+            //        Name = "Bob",
+            //        Orders =
+            //            new List<Order>
+            //            {
+            //                new Order { OrderNumber = "1234112" },
+            //                new Order { OrderNumber = "123123123" }
+            //            }
+            //    };
+            //    var storedCustomer = customerClient.Store(customer);
+            //    lastId = storedCustomer.Id;
+            //}
 
-            using (var client = new RedisClient())
-            {
-                var customerClient = client.As<Customer>();
-                var customer = customerClient.GetById(lastId);
-                Console.WriteLine("Got customer {0} with name {1}", customer.Id, customer.Name);
-            }
+            //using (var client = new RedisClient())
+            //{
+            //    var customerClient = client.As<Customer>();
+            //    var customer = customerClient.GetById(lastId);
+            //    Console.WriteLine("Got customer {0} with name {1}", customer.Id, customer.Name);
+            //}
 
+            using (IRedisClient client = new RedisClient())
+            {
+                var transaction = client.CreateTransaction();
+                transaction.QueueCommand(c=> c.Set("abc",1));
+                transaction.QueueCommand(c => c.Increment("abc", 1));
+                transaction.Commit();
+                var result = client.Get<int>("abc");
+                Console.WriteLine(result);
+            }
         }
 
         public class Customer
