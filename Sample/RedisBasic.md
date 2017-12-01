@@ -49,3 +49,9 @@ scard post:1:likes
 smembers post:1:likes
 sdiff post:1:likes post:2:likes
 ```
+
+#### Using pub & sub
+```
+subscribe greetings
+publish greetings "something"
+```
